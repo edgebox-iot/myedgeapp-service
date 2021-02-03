@@ -1,0 +1,37 @@
+version: '3.0'
+services:
+  
+  service:
+
+    container_name: ${COMPOSE_PROJECT_NAME}-service
+    
+    build:
+      context: ./bin/myedgeapp/${BUILD_ARCH}
+
+    environment:
+      VIRTUAL_HOST: ${VIRTUAL_HOST}
+      ETCD_HOST: myedgeapp-kv
+    
+    ports:
+    - 80:80/tcp
+    - 433:433/tcp
+    
+    restart: always
+    
+    volumes:
+    - ./config/traefik.toml:/etc/traefik/traefik.toml
+    - ./config/traefik_dynamic.toml:/etc/traefik/traefik_dynamic.toml
+    - ./config/tinc_boot.token:/etc/tinc/tinc_boot.token
+  
+  # kv:
+  #   build:
+  #     context: bin/kv/${BUILD_ARCH}
+
+  #   container_name: ${COMPOSE_PROJECT_NAME}-kv
+
+  #   environment:
+  #     TEST: example
+    
+  #   ports: 
+  #   - 2379:2379/tcp
+  #   - 2380:2380&/tcp

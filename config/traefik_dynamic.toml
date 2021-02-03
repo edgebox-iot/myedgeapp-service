@@ -1,0 +1,27 @@
+[http.middlewares.simpleAuth.basicAuth]
+  users = [
+    "admin:$apr1$bND9Kod2$E2on/Km6iD0wkYGG/AXug1"
+  ]
+
+[http.routers.api]
+  rule = "Host(`traefik-monitor.myedge.app`)"
+  entrypoints = ["web"]
+  middlewares = ["simpleAuth"]
+  service = "api@internal"
+
+[http.routers.saccotruta]
+  rule = "Host(`saccotruta-nextcloud.myedge.app`)"
+  entrypoints = ["web"]
+  service = "saccotruta"
+
+[http.routers.saccotruta-api]
+  rule = "Host(`saccotruta-api.myedge.app`)"
+  entrypoints = ["web"]
+  service = "saccotruta"
+
+## Dynamic configuration
+[http.services]
+  [http.services.saccotruta-api.loadBalancer]
+    [[http.services.saccotruta.loadBalancer.servers]]
+      url = "http://10.10.10.2"
+

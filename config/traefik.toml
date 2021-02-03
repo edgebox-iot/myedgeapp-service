@@ -1,0 +1,15 @@
+[entryPoints]
+  [entryPoints.web]
+    address = ":80"
+  [entryPoints.web.forwardedHeaders]
+    insecure = true
+  [entryPoints.web.proxyProtocol]
+      insecure = true
+
+[api]
+  dashboard = true
+
+[providers.file]
+  filename = "traefik_dynamic.toml"
+
+
