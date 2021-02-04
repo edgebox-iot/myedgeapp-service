@@ -21,7 +21,7 @@
 
 ## Dynamic configuration
 [http.services]
-  [http.services.saccotruta-api.loadBalancer]
+  [http.services.saccotruta.loadBalancer]
     [[http.services.saccotruta.loadBalancer.servers]]
       url = "http://10.10.10.2"
 

@@ -51,8 +51,12 @@ if [ "$IS_BOOTNODE" = "True" ]; then
 fi
 
 echo " -> Installing traefik"
-wget --quiet -O /usr/local/bin/traefik "https://github.com/traefik/traefik/releases/download/v1.7.28/traefik_linux-amd64"
+wget --quiet -O /usr/local/bin/traefik "https://github.com/traefik/traefik/releases/download/v2.4.2/traefik_linux-amd64"
 chmod +x /usr/local/bin/traefik
+
+echo " -> Setting traefik config files"
+mkdir /etc/traefik
+cp ./config/traefik* /etc/traefik/
 
 nohup traefik > logs/traefik.log &
 
