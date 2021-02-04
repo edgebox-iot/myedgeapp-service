@@ -58,12 +58,34 @@ echo " -> Setting traefik config files"
 mkdir /etc/traefik
 cp ./config/traefik* /etc/traefik/
 
+killall traefik
+sleep 5
 nohup traefik > logs/traefik.log &
+
+echo " -> Installing etcd"
+ETCD_VER=v3.4.14
+# choose either URL
+GOOGLE_URL=https://storage.googleapis.com/etcd
+GITHUB_URL=https://github.com/etcd-io/etcd/releases/download
+DOWNLOAD_URL=${GOOGLE_URL}
+
+rm -f /tmp/etcd-${ETCD_VER}-linux-amd64.tar.gz
+rm -rf /tmp/etcd-download-test && mkdir -p /tmp/etcd-download-test
+
+curl -L ${DOWNLOAD_URL}/${ETCD_VER}/etcd-${ETCD_VER}-linux-amd64.tar.gz -o /tmp/etcd-${ETCD_VER}-linux-amd64.tar.gz
+tar xzvf /tmp/etcd-${ETCD_VER}-linux-amd64.tar.gz -C /tmp/etcd-download-test --strip-components=1
+rm -f /tmp/etcd-${ETCD_VER}-linux-amd64.tar.gz
+
+mv /tmp/etcd-download-test/etc* /usr/local/bin
+
+etcd --version
+etcdctl version
+
+killall etcd
+sleep 5
+nohup etcd > logs/etcd.log &
 
 # This is enough to get the tunnel setup and auto-handshake + key exchange possible.
 # Next steps are:
-# - Installing / setting up etcd
 # - Automatically call the edgebox.io API to get the bootnode ip
 # - Automatically call the edgebox.io API to get a prefix ip (if not boot node)
-# - Moving traefik binary to the proper folder, create a sysctl service for it.
-# - Connect traefik configuration to etcd instance (runs on the boot-node as well)

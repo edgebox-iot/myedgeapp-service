@@ -9,19 +9,4 @@
   middlewares = ["simpleAuth"]
   service = "api@internal"
 
-[http.routers.saccotruta]
-  rule = "Host(`saccotruta-nextcloud.myedge.app`)"
-  entrypoints = ["web"]
-  service = "saccotruta"
-
-[http.routers.saccotruta-api]
-  rule = "Host(`saccotruta-api.myedge.app`)"
-  entrypoints = ["web"]
-  service = "saccotruta"
-
-## Dynamic configuration
-[http.services]
-  [http.services.saccotruta.loadBalancer]
-    [[http.services.saccotruta.loadBalancer.servers]]
-      url = "http://10.10.10.2"
-
+# Dynamic configuration for each edgebox and their hostnames is defined dynamically via etcd.

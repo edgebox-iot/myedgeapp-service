@@ -12,4 +12,7 @@
 [providers.file]
   filename = "/etc/traefik/traefik_dynamic.toml"
 
+[providers.etcd]
+  endpoints = ["127.0.0.1:2379"]
+
 
