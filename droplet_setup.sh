@@ -50,18 +50,6 @@ if [ "$IS_BOOTNODE" = "True" ]; then
 
 fi
 
-echo " -> Installing traefik"
-wget --quiet -O /usr/local/bin/traefik "https://github.com/traefik/traefik/releases/download/v2.4.2/traefik_linux-amd64"
-chmod +x /usr/local/bin/traefik
-
-echo " -> Setting traefik config files"
-mkdir /etc/traefik
-cp ./config/traefik* /etc/traefik/
-
-killall traefik
-sleep 5
-nohup traefik > logs/traefik.log &
-
 echo " -> Installing etcd"
 ETCD_VER=v3.4.14
 # choose either URL
@@ -81,9 +69,23 @@ mv /tmp/etcd-download-test/etc* /usr/local/bin
 etcd --version
 etcdctl version
 
+# TODO: Find if is boot node or slave node and configure appropriately. Right now runs always as standalone.
+
 killall etcd
 sleep 5
 nohup etcd > logs/etcd.log &
+
+echo " -> Installing traefik"
+wget --quiet -O /usr/local/bin/traefik "https://github.com/traefik/traefik/releases/download/v2.4.2/traefik_linux-amd64"
+chmod +x /usr/local/bin/traefik
+
+echo " -> Setting traefik config files"
+mkdir /etc/traefik
+cp ./config/traefik* /etc/traefik/
+
+killall traefik
+sleep 5
+nohup traefik > logs/traefik.log &
 
 # This is enough to get the tunnel setup and auto-handshake + key exchange possible.
 # Next steps are:
